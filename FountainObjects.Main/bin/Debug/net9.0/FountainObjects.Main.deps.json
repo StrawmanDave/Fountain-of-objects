@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "FountainObjects.Main/1.0.0": {
+        "dependencies": {
+          "FountainObjects": "1.0.0"
+        },
+        "runtime": {
+          "FountainObjects.Main.dll": {}
+        }
+      },
+      "FountainObjects/1.0.0": {
+        "runtime": {
+          "FountainObjects.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "FountainObjects.Main/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "FountainObjects/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

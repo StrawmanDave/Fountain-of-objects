@@ -1,0 +1,12 @@
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\bin\Debug\net9.0\FountainObjects.deps.json
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\bin\Debug\net9.0\FountainObjects.dll
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\bin\Debug\net9.0\FountainObjects.pdb
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\FountainObjects.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\FountainObjects.AssemblyInfoInputs.cache
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\FountainObjects.AssemblyInfo.cs
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\FountainObjects.csproj.CoreCompileInputs.cache
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\FountainObjects.sourcelink.json
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\FountainObjects.dll
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\refint\FountainObjects.dll
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\FountainObjects.pdb
+C:\Users\HumbleIcarus\Documents\Programming 1410-1415\Programming-1410\Fountain-of-objects\FountainObjects\obj\Debug\net9.0\ref\FountainObjects.dll
