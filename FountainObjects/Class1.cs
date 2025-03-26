@@ -15,6 +15,7 @@ public class Maze
         rowColumn[0,0].sense = "You see light coming from the cavern entrance.";
         rowColumn[0,0].item = 'D';
         setFountainLocation();
+        setPitLocation();
         Current = rowColumn[y,x];
     }
     public Maze(int size)
@@ -62,11 +63,74 @@ public class Maze
     public void setFountainLocation()
     {
         Random rand = new Random();
-        int getRand = rand.Next(1,3);
+        int randomRow = 0;
+        int randomColumn = 0;
+        while(randomRow == 0 && randomColumn == 0)
+        {
+            randomRow = rand.Next(0,4);
+            randomColumn = rand.Next(0,4);
+        }
         Room containsFountain = new Room();
         containsFountain.sense = "You hear water dripping in this room. The Fountain of Objects is here!";
         containsFountain.item = 'F';
-        rowColumn[getRand,getRand] = containsFountain;
+        rowColumn[randomRow,randomColumn] = containsFountain;
+    }
+
+    public void setPitLocation()
+    {
+        Room pit = new Room();
+        pit.item = 'P';
+        Random rand = new Random();
+        int newRandom = rand.Next(0,4);
+        if(rowColumn[newRandom,newRandom].item == 'F' || newRandom == 0 || rowColumn[newRandom,newRandom].item == 'P')
+        {
+            newRandom = rand.Next(0,4);
+            rowColumn[newRandom,newRandom] = pit;
+        }else
+        {
+            rowColumn[newRandom,newRandom] = pit;
+        }
+
+        //Then set the surrounding Rooms sense to display a pit in a nearby room
+        if(canMove(newRandom -1, newRandom) == true) // one south of the pit
+        {
+            rowColumn[newRandom -1,newRandom].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
+
+        if(canMove(newRandom +1, newRandom) == true) // one North of the pit
+        {
+            rowColumn[newRandom +1,newRandom].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
+    
+        if(canMove(newRandom, newRandom +1) == true) // one east of the pit
+        {
+            rowColumn[newRandom,newRandom +1].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
+
+        if(canMove(newRandom, newRandom -1) == true) // one west of the pit
+        {
+            rowColumn[newRandom,newRandom -1].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
+
+        if(canMove(newRandom -1, newRandom -1) == true) // one south west of the pit
+        {
+            rowColumn[newRandom -1,newRandom -1].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
+
+        if(canMove(newRandom -1, newRandom +1) == true) // one south east of the pit
+        {
+            rowColumn[newRandom -1,newRandom +1].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
+
+        if(canMove(newRandom +1, newRandom -1) == true) // one north west of the pit
+        {
+            rowColumn[newRandom +1 ,newRandom -1].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
+
+        if(canMove(newRandom +1, newRandom +1) == true) // one north east of the pit
+        {
+            rowColumn[newRandom +1,newRandom +1].sense = "You feel a draft. There is a pit in a nearby room.";
+        }
     }
 
     public bool canMove(int row, int column)

@@ -59,6 +59,11 @@ void runGame(Maze chosenMaze)
                 }
             break;
         }
+        if(chosenMaze.Current.item == 'P')
+        {
+            Console.WriteLine("You fell in a pit and died.");
+            break;
+        }
     }
 }
 
