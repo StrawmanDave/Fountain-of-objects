@@ -93,31 +93,11 @@ public class Maze
         setSurroundings(randomRow,randomColumn, "You feel a draft. There is a pit in a nearby room.");
     }
 
-    public void removeAllRoomTypes(char contains)
-    {
-        for(int row = 0; row< rowColumn.GetLength(0); row++)
-        {
-            for(int column = 0; column<rowColumn.GetLength(1); column++)
-            {
-                if(rowColumn[row,column].item == contains)
-                {
-                    rowColumn[row,column] = new Room();
-                }
-            }
-        }
-    }
-
-    public bool canBePlaced(int row, int column)
-    {
-        if(rowColumn[row,column].item != 'F' && rowColumn[row,column].item != 'D' && rowColumn[row,column].item != 'P' && rowColumn[row,column].item != 'M')
-        {
-            return true;
-        }
-        return false;
-    }
-
     public void addMaelstroms()
     {
+        Room Maelstrom = new Room();
+        Maelstrom.item = 'M';
+
         Random rand = new Random();
         int randomRow;;
         int randmColumn;
@@ -126,8 +106,26 @@ public class Maze
             randomRow = rand.Next(0,rowColumn.GetLength(0));
             randmColumn = rand.Next(0,rowColumn.GetLength(1));
         }while(canBePlaced(randomRow,randmColumn) == false);
-        rowColumn[randomRow,randmColumn] = Maelstrom();
+        rowColumn[randomRow,randmColumn] = Maelstrom;
         setSurroundings(randomRow, randmColumn, "You hear the growling and groaning of a malestrom nearby.");
+    }
+
+    public void addAmaroks()
+    {
+        Room Amarok = new Room();
+        Amarok.item = 'A';
+
+        Random rand = new Random();
+        int randomRow;
+        int randomColumn;
+        do
+        {
+            randomRow = rand.Next(0, rowColumn.GetLength(0));
+            randomColumn = rand.Next(0, rowColumn.GetLength(1));
+        }while(canBePlaced(randomRow,randomColumn) == false);
+
+        rowColumn[randomRow,randomColumn] = Amarok;
+        setSurroundings(randomRow,randomColumn, "You can smell the rotten stench of amarok in a nearby room.");
     }
 
     public Room Maelstrom()
@@ -173,6 +171,7 @@ public class Maze
             moveEast();
         }
     }
+
     public void clearSurroundings(int row, int column)
     {
         if(canMove(row -1, column) == true) // one south of the pit
@@ -306,6 +305,44 @@ public class Maze
             }
         }
     }
+
+    public void removeAllRoomTypes(char contains)
+    {
+        for(int row = 0; row< rowColumn.GetLength(0); row++)
+        {
+            for(int column = 0; column<rowColumn.GetLength(1); column++)
+            {
+                if(rowColumn[row,column].item == contains)
+                {
+                    rowColumn[row,column] = new Room();
+                }
+            }
+        }
+    }
+
+    public bool canBePlaced(int row, int column)
+    {
+        if(rowColumn[row,column].item == 'F')
+        {
+            return false;
+        }else if(rowColumn[row,column].item == 'D')
+        {
+            return false;
+        }else if(rowColumn[row,column].item == 'P')
+        {
+            return false;
+        }else if(rowColumn[row,column].item == 'M')
+        {
+            return false;
+        }else if(rowColumn[row,column].item == 'A')
+        {
+            return false;
+        }else
+        {
+            return true;
+        }
+    }
+
 
     public bool canMove(int row, int column)
     {

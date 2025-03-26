@@ -17,6 +17,8 @@ switch(mazeSize)
     medium.addPitLocation();
     medium.addPitLocation();
     medium.addMaelstroms();
+    medium.addAmaroks();
+    medium.addAmaroks();
     runGame(medium);
     break;
     case "large":
@@ -27,6 +29,9 @@ switch(mazeSize)
     large.addPitLocation();
     large.addMaelstroms();
     large.addMaelstroms();
+    large.addAmaroks();
+    large.addAmaroks();
+    large.addAmaroks();
     runGame(large);
     break;
 }
@@ -49,6 +54,12 @@ void runGame(Maze chosenMaze)
         if(chosenMaze.Current.item == 'P')
         {
             Console.WriteLine("You fell in a pit and died.");
+            break;
+        }
+
+        if(chosenMaze.Current.item == 'A')
+        {
+            Console.WriteLine("You ran into a amarok you instantly died");
             break;
         }
 
