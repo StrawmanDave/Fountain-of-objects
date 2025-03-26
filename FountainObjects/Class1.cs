@@ -3,7 +3,6 @@
 public class Maze
 {
     //4by4 grid of rooms room (Row=0, Column=0) is the start and the end.
-    //room(Row=0,Column=2) is the fountain room
     public Room[,] rowColumn = new Room[,]{};
     public Room Current;
     public int x = 0;
@@ -15,7 +14,7 @@ public class Maze
         rowColumn[0,0].sense = "You see light coming from the cavern entrance.";
         rowColumn[0,0].item = 'D';
         setFountainLocation();
-        setPitLocation();
+        addPitLocation();
         Current = rowColumn[y,x];
     }
     public Maze(int size)
@@ -67,8 +66,8 @@ public class Maze
         int randomColumn = 0;
         while(randomRow == 0 && randomColumn == 0)
         {
-            randomRow = rand.Next(0,4);
-            randomColumn = rand.Next(0,4);
+            randomRow = rand.Next(0,rowColumn.GetLength(0));
+            randomColumn = rand.Next(0,rowColumn.GetLength(1));
         }
         Room containsFountain = new Room();
         containsFountain.sense = "You hear water dripping in this room. The Fountain of Objects is here!";
@@ -76,60 +75,235 @@ public class Maze
         rowColumn[randomRow,randomColumn] = containsFountain;
     }
 
-    public void setPitLocation()
+    public void addPitLocation()
     {
         Room pit = new Room();
         pit.item = 'P';
         Random rand = new Random();
-        int newRandom = rand.Next(0,4);
-        if(rowColumn[newRandom,newRandom].item == 'F' || newRandom == 0 || rowColumn[newRandom,newRandom].item == 'P')
+        int randomRow;
+        int randomColumn;
+        do
         {
-            newRandom = rand.Next(0,4);
-            rowColumn[newRandom,newRandom] = pit;
-        }else
+            //removeAllRooms(pit);
+            randomRow = rand.Next(0,rowColumn.GetLength(0));
+            randomColumn = rand.Next(0,rowColumn.GetLength(1));
+        }while(canBePlaced(randomRow,randomColumn) == false);
+
+        rowColumn[randomRow,randomColumn] = pit;
+        setSurroundings(randomRow,randomColumn, "You feel a draft. There is a pit in a nearby room.");
+    }
+
+    public void removeAllRoomTypes(char contains)
+    {
+        for(int row = 0; row< rowColumn.GetLength(0); row++)
         {
-            rowColumn[newRandom,newRandom] = pit;
+            for(int column = 0; column<rowColumn.GetLength(1); column++)
+            {
+                if(rowColumn[row,column].item == contains)
+                {
+                    rowColumn[row,column] = new Room();
+                }
+            }
+        }
+    }
+
+    public bool canBePlaced(int row, int column)
+    {
+        if(rowColumn[row,column].item != 'F' && rowColumn[row,column].item != 'D' && rowColumn[row,column].item != 'P' && rowColumn[row,column].item != 'M')
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void addMaelstroms()
+    {
+        Random rand = new Random();
+        int randomRow;;
+        int randmColumn;
+        do
+        {
+            randomRow = rand.Next(0,rowColumn.GetLength(0));
+            randmColumn = rand.Next(0,rowColumn.GetLength(1));
+        }while(canBePlaced(randomRow,randmColumn) == false);
+        rowColumn[randomRow,randmColumn] = Maelstrom();
+        setSurroundings(randomRow, randmColumn, "You hear the growling and groaning of a malestrom nearby.");
+    }
+
+    public Room Maelstrom()
+    {
+        Room Maelstrom = new Room();
+        Maelstrom.item = 'M';
+        return Maelstrom;
+    }
+
+    public void malestromEffect()
+    {
+        if(Current.item == 'M')
+        {
+            clearSurroundings(y,x);
+            rowColumn[y,x].item = ' ';
+
+            if(canMove(y+1, x-2) == true)
+            {
+                rowColumn[y+1, x-2] = Maelstrom();
+                setSurroundings(y+1,x-2, "You hear the growling and groaning of a malestrom nearby.");
+            }else if(canMove(y+1,x -1) == true)
+            {
+                rowColumn[y+1, x-1] = Maelstrom();
+                setSurroundings(y+1,x-1, "You hear the growling and groaning of a malestrom nearby.");
+            }else if(canMove(y+1, x))
+            {
+                rowColumn[y+1, x] = Maelstrom();
+                setSurroundings(y+1,x, "You hear the growling and groaning of a malestrom nearby.");
+            }else if(canMove(y, x-2))
+            {
+                rowColumn[y, x-2] = Maelstrom();
+                setSurroundings(y,x-2, "You hear the growling and groaning of a malestrom nearby.");
+            }else if(canMove(y,x-1))
+            {
+                rowColumn[y, x-1] = Maelstrom();
+                setSurroundings(y,x-1, "You hear the growling and groaning of a malestrom nearby.");
+            }else
+            {
+
+            }
+            moveNorth();
+            moveEast();
+            moveEast();
+        }
+    }
+    public void clearSurroundings(int row, int column)
+    {
+        if(canMove(row -1, column) == true) // one south of the pit
+        {
+            rowColumn[row -1, column].sense = " ";
         }
 
-        //Then set the surrounding Rooms sense to display a pit in a nearby room
-        if(canMove(newRandom -1, newRandom) == true) // one south of the pit
+        if(canMove(row +1, column) == true) // one North of the pit
         {
-            rowColumn[newRandom -1,newRandom].sense = "You feel a draft. There is a pit in a nearby room.";
-        }
-
-        if(canMove(newRandom +1, newRandom) == true) // one North of the pit
-        {
-            rowColumn[newRandom +1,newRandom].sense = "You feel a draft. There is a pit in a nearby room.";
+            rowColumn[row +1, column].sense = " ";
         }
     
-        if(canMove(newRandom, newRandom +1) == true) // one east of the pit
+        if(canMove(row, column +1) == true) // one east of the pit
         {
-            rowColumn[newRandom,newRandom +1].sense = "You feel a draft. There is a pit in a nearby room.";
+            rowColumn[row, column +1].sense = " ";
         }
 
-        if(canMove(newRandom, newRandom -1) == true) // one west of the pit
+        if(canMove(row, column -1) == true) // one west of the pit
         {
-            rowColumn[newRandom,newRandom -1].sense = "You feel a draft. There is a pit in a nearby room.";
+            rowColumn[row, column -1].sense = " ";
         }
 
-        if(canMove(newRandom -1, newRandom -1) == true) // one south west of the pit
+        if(canMove(row -1, column -1) == true) // one south west of the pit
         {
-            rowColumn[newRandom -1,newRandom -1].sense = "You feel a draft. There is a pit in a nearby room.";
+            rowColumn[row -1, column -1].sense = " ";
         }
 
-        if(canMove(newRandom -1, newRandom +1) == true) // one south east of the pit
+        if(canMove(row -1, column +1) == true) // one south east of the pit
         {
-            rowColumn[newRandom -1,newRandom +1].sense = "You feel a draft. There is a pit in a nearby room.";
+            rowColumn[row -1, column +1].sense = " ";
         }
 
-        if(canMove(newRandom +1, newRandom -1) == true) // one north west of the pit
+        if(canMove(row +1, column -1) == true) // one north west of the pit
         {
-            rowColumn[newRandom +1 ,newRandom -1].sense = "You feel a draft. There is a pit in a nearby room.";
+            rowColumn[row +1, column -1].sense = " ";
         }
 
-        if(canMove(newRandom +1, newRandom +1) == true) // one north east of the pit
+        if(canMove(row +1, column +1) == true) // one north east of the pit
         {
-            rowColumn[newRandom +1,newRandom +1].sense = "You feel a draft. There is a pit in a nearby room.";
+            rowColumn[row +1, column +1].sense = " ";
+        }
+    }
+    public void setSurroundings(int row, int column, string words)
+    {
+        
+        if(canMove(row -1, column) == true) // one south of the pit
+        {
+            if(rowColumn[row -1, column].sense == " ")
+            {
+                rowColumn[row -1, column].sense = words;
+            }else
+            {
+                rowColumn[row -1, column].sense = rowColumn[row -1, column].sense + "\n" + words;
+            }
+        }
+
+        if(canMove(row +1, column) == true) // one North of the pit
+        {
+            if(rowColumn[row +1, column].sense == " ")
+            {
+                rowColumn[row +1, column].sense = words;
+            }else
+            {
+                rowColumn[row +1, column].sense = rowColumn[row +1, column].sense + "\n" + words;
+            }
+        }
+    
+        if(canMove(row, column +1) == true) // one east of the pit
+        {
+            if(rowColumn[row, column +1].sense == " ")
+            {
+                rowColumn[row, column +1].sense = words;
+            }else
+            {
+                rowColumn[row, column +1].sense = rowColumn[row, column +1].sense + "\n" + words;
+            }
+        }
+
+        if(canMove(row, column -1) == true) // one west of the pit
+        {
+            if(rowColumn[row, column -1].sense == " ")
+            {
+                rowColumn[row, column -1].sense = words;
+            }else
+            {
+                rowColumn[row, column -1].sense = rowColumn[row, column -1].sense  + "\n" + words;
+            }
+        }
+
+        if(canMove(row -1, column -1) == true) // one south west of the pit
+        {
+            if(rowColumn[row -1, column -1].sense == " ")
+            {
+                rowColumn[row -1, column -1].sense = words;
+            }else
+            {
+                rowColumn[row -1, column -1].sense = rowColumn[row -1, column -1].sense + "\n" + words;
+            }
+        }
+
+        if(canMove(row -1, column +1) == true) // one south east of the pit
+        {
+            if(rowColumn[row -1, column +1].sense == " ")
+            {
+                rowColumn[row -1, column +1].sense = words;
+            }else
+            {
+                rowColumn[row -1, column +1].sense = rowColumn[row -1, column +1].sense + "\n" + words;
+            }
+        }
+
+        if(canMove(row +1, column -1) == true) // one north west of the pit
+        {
+            if(rowColumn[row +1, column -1].sense == " ")
+            {
+                rowColumn[row +1, column -1].sense = words;
+            }else
+            {
+                rowColumn[row +1, column -1].sense = rowColumn[row +1, column -1].sense + "\n" + words;
+            }
+        }
+
+        if(canMove(row +1, column +1) == true) // one north east of the pit
+        {
+            if(rowColumn[row +1, column +1].sense == " ")
+            {
+                rowColumn[row +1, column +1].sense = words;
+            }else
+            {
+                rowColumn[row +1, column +1].sense = rowColumn[row +1, column +1].sense + "\n" + words;
+            }
         }
     }
 
