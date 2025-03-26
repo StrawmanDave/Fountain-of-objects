@@ -14,8 +14,7 @@ public class Maze
         setArray();
         rowColumn[0,0].sense = "You see light coming from the cavern entrance.";
         rowColumn[0,0].item = 'D';
-        rowColumn[0,2].sense = "You hear water dripping in this room. The Fountain of Objects is here!";
-        rowColumn[0,2].item = 'F';
+        setFountainLocation();
         Current = rowColumn[y,x];
     }
     public Maze(int size)
@@ -24,8 +23,7 @@ public class Maze
         setArray();
         rowColumn[0,0].sense = "You see light coming from the cavern entrance.";
         rowColumn[0,0].item = 'D';
-        rowColumn[0,2].sense = "You hear water dripping in this room. The Fountain of Objects is here!";
-        rowColumn[0,2].item = 'F';
+        setFountainLocation();
         Current = rowColumn[y,x];
     }
     public Maze(int row, int column)
@@ -34,8 +32,7 @@ public class Maze
         setArray();
         rowColumn[0,0].sense = "You see light coming from the cavern entrance.";
         rowColumn[0,0].item = 'D';
-        rowColumn[0,2].sense = "You hear water dripping in this room. The Fountain of Objects is here!";
-        rowColumn[0,2].item = 'F';
+        setFountainLocation();
         Current = rowColumn[y,x];
     }
 
@@ -62,14 +59,24 @@ public class Maze
         }
     }
 
+    public void setFountainLocation()
+    {
+        Random rand = new Random();
+        int getRand = rand.Next(1,3);
+        Room containsFountain = new Room();
+        containsFountain.sense = "You hear water dripping in this room. The Fountain of Objects is here!";
+        containsFountain.item = 'F';
+        rowColumn[getRand,getRand] = containsFountain;
+    }
+
     public bool canMove(int row, int column)
     {
-        if(row > rowColumn.GetLength(0) || row < 0)
+        if(row > rowColumn.GetLength(0) -1 || row < 0)
         {
             return false;
         }
 
-        if(column > rowColumn.GetLength(1) || column < 0)
+        if(column > rowColumn.GetLength(1) -1 || column < 0)
         {
             return false;
         }
@@ -78,17 +85,17 @@ public class Maze
 
     public void moveNorth()
     {
-        if(canMove(y+1, x) == true) //current.Row current.column
+        if(canMove(y-1, x) == true) //current.Row current.column
         {
-            y++;
+            y--;
             Current = rowColumn[y,x];
         }
     }
     public void moveSouth()
     {
-        if(canMove(y-1, x) == true) //current.Row current.column
+        if(canMove(y+1, x) == true) //current.Row current.column
         {
-            y--;
+            y++;
             Current = rowColumn[y,x];
         }        
     }
