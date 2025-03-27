@@ -66,11 +66,21 @@ public class Maze
 
     public void resetMaze()
     {
+        for(int i = 0; i <rowColumn.GetLength(0); i++) // idea is to go through each item in the maze and set the sense of each room to " "
+        {
+            for(int j = 0; j <rowColumn.GetLength(1); j++)
+            {
+                if(canMove(i,j) == true)
+                {
+                    rowColumn[i,j].sense = " ";
+                }
+            }
+        }
+
         for(int row = 0; row<rowColumn.GetLength(0); row ++)
         {
             for(int column = 0; column<rowColumn.GetLength(1); column++)
             {
-                rowColumn[row,column].sense = " ";
                 if(rowColumn[row,column].item == 'F')
                 {
                     rowColumn[row,column].sense = "You hear water dripping in this room. The Fountain of Objects is here!";
@@ -82,7 +92,7 @@ public class Maze
                     setSurroundings(row,column, "You hear the growling and groaning of a maelstrom nearby.");
                 }else if(rowColumn[row,column].item == 'A')
                 {
-                    setSurroundings(row,column,"You can smeel the rotten stench of an amarok in a nearby room");
+                    setSurroundings(row,column,"You can smell the rotten stench of an amarok in a nearby room");
                 }else if(rowColumn[row,column].item == 'D')
                 {
                     rowColumn[row,column].sense = "You see light coming from the cavern entrance.";
@@ -138,8 +148,8 @@ public class Maze
         do
         {
             //removeAllRooms(pit);
-            randomRow = rand.Next(0,rowColumn.GetLength(0));
-            randomColumn = rand.Next(0,rowColumn.GetLength(1));
+            randomRow = rand.Next(0,rowColumn.GetLength(0) -1);
+            randomColumn = rand.Next(0,rowColumn.GetLength(1) -1);
         }while(canBePlaced(randomRow,randomColumn) == false);
 
         rowColumn[randomRow,randomColumn] = pit;
@@ -160,7 +170,7 @@ public class Maze
             randmColumn = rand.Next(0,rowColumn.GetLength(1));
         }while(canBePlaced(randomRow,randmColumn) == false);
         rowColumn[randomRow,randmColumn] = Maelstrom;
-        setSurroundings(randomRow, randmColumn, "You hear the growling and groaning of a malestrom nearby.");
+        setSurroundings(randomRow, randmColumn, "You hear the growling and groaning of a maelstrom nearby.");
     }
 
     public void addAmaroks()
@@ -188,7 +198,7 @@ public class Maze
         return Maelstrom;
     }
 
-    public void malestromEffect()
+    public void maelstromEffect()
     {
         if(Current.item == 'M')
         {
@@ -229,27 +239,27 @@ public class Maze
 
     public void clearSurroundings(int row, int column)
     {
-        if(canMove(row -1, column) == true) // one south of the pit
+        if(canMove(row -1, column) == true) // one south
         {
             rowColumn[row -1, column].sense = " ";
         }
 
-        if(canMove(row +1, column) == true) // one North of the pit
+        if(canMove(row +1, column) == true) // one North
         {
             rowColumn[row +1, column].sense = " ";
         }
     
-        if(canMove(row, column +1) == true) // one east of the pit
+        if(canMove(row, column +1) == true) // one east
         {
             rowColumn[row, column +1].sense = " ";
         }
 
-        if(canMove(row, column -1) == true) // one west of the pit
+        if(canMove(row, column -1) == true) // one west
         {
             rowColumn[row, column -1].sense = " ";
         }
 
-        if(canMove(row -1, column -1) == true) // one south west of the pit
+        if(canMove(row -1, column -1) == true) // one south west
         {
             rowColumn[row -1, column -1].sense = " ";
         }
@@ -272,7 +282,7 @@ public class Maze
     public void setSurroundings(int row, int column, string words)
     {
         
-        if(canMove(row -1, column) == true) // one south of the pit
+        if(canMove(row -1, column) == true) // one south
         {
             if(rowColumn[row -1, column].sense == " ")
             {
@@ -283,7 +293,7 @@ public class Maze
             }
         }
 
-        if(canMove(row +1, column) == true) // one North of the pit
+        if(canMove(row +1, column) == true) // one North
         {
             if(rowColumn[row +1, column].sense == " ")
             {
@@ -294,7 +304,7 @@ public class Maze
             }
         }
     
-        if(canMove(row, column +1) == true) // one east of the pit
+        if(canMove(row, column +1) == true) // one east
         {
             if(rowColumn[row, column +1].sense == " ")
             {
@@ -305,7 +315,7 @@ public class Maze
             }
         }
 
-        if(canMove(row, column -1) == true) // one west of the pit
+        if(canMove(row, column -1) == true) // one west
         {
             if(rowColumn[row, column -1].sense == " ")
             {
@@ -316,7 +326,7 @@ public class Maze
             }
         }
 
-        if(canMove(row -1, column -1) == true) // one south west of the pit
+        if(canMove(row -1, column -1) == true) // one south west
         {
             if(rowColumn[row -1, column -1].sense == " ")
             {
@@ -327,7 +337,7 @@ public class Maze
             }
         }
 
-        if(canMove(row -1, column +1) == true) // one south east of the pit
+        if(canMove(row -1, column +1) == true) // one south east
         {
             if(rowColumn[row -1, column +1].sense == " ")
             {
@@ -338,7 +348,7 @@ public class Maze
             }
         }
 
-        if(canMove(row +1, column -1) == true) // one north west of the pit
+        if(canMove(row +1, column -1) == true) // one north west 
         {
             if(rowColumn[row +1, column -1].sense == " ")
             {
@@ -349,7 +359,7 @@ public class Maze
             }
         }
 
-        if(canMove(row +1, column +1) == true) // one north east of the pit
+        if(canMove(row +1, column +1) == true) // one north east 
         {
             if(rowColumn[row +1, column +1].sense == " ")
             {
@@ -401,12 +411,12 @@ public class Maze
 
     public bool canMove(int row, int column)
     {
-        if(row > rowColumn.GetLength(0) -1 || row < 0)
+        if(row >= rowColumn.GetLength(0) || row < 0)
         {
             return false;
         }
 
-        if(column > rowColumn.GetLength(1) -1 || column < 0)
+        if(column >= rowColumn.GetLength(1) || column < 0)
         {
             return false;
         }
@@ -472,31 +482,5 @@ public class Room
     {
         sense = " ";
         item = ' ';
-    }
-}
-
-public class RandomTip
-{
-    Dictionary<int,string> listOfTips = new Dictionary<int,string>();
-
-    public RandomTip()
-    {
-        listOfTips.Add(1,"You can enable the fountain by typing the command 'enable fountain'.");
-        listOfTips.Add(2,"You can destroy maelstroms and amaroks with the command any of the 'shoot north,south,west,east' commands.");
-        listOfTips.Add(3,"When the arrow count is 0 you can no longer shoot any arrows.");
-        listOfTips.Add(4,"Watch out for pits.");
-        listOfTips.Add(5,"Stay astray from amaroks");
-    }
-
-    public int getRandomtip()
-    {
-        Random rand = new Random();
-        int tipNumber = rand.Next(1,5);
-        return tipNumber;
-    }
-
-    public void displayTip()
-    {
-        Console.WriteLine(listOfTips[1]);
     }
 }

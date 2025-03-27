@@ -1,26 +1,53 @@
 ﻿//The player is told they can sense in the dark(see, hear, smell).
 using FountainObjects;
 
+string description = @"
+You enter the Cavern of Objects, a maze of rooms filled with dangerous pits in search of the Fountain of Objects.
+Light is visible only in the entrance, and no other light is seen anywhere in the caverns.
+You must navigate the Caverns with your other senses.
+Find the Fountain of Objects, activate it, and return to the entrance.
+Look out for pits. You will feel a breeze if a pit is in an adjacent room. If you enter a room with a pit, you will die.
+Maelstroms are violent forces of sentient wind. Entering a room with one could transport you to any other location in the caverns.
+You will be able to hear thier growling and groaning in nearby rooms.
+Amaroks roam the caverns. Encountering one is certain death, but you can smell their rotten stench in nearby rooms.
+You carry with you a bow and a quiver of arrows. You can use them to shoot monsters in the caverns but be warned: you have a limited supply.
+Enter help if you need any help
+";
+
+string help = @"
+List of commands:
+move north(moves you one up)
+move south(moves you one down)
+move east(moves you one to the left)
+move west(moves you one to the right)
+enable fountain(enables the fountain only if you are in the fountain room)
+shoot north(shoots an arrow up one)
+shoot south(shoots an arrow down one)
+shoot east(shoots an arrow to your left)
+shoot west(shoots an arrow to your right)
+";
+
 Console.Clear();
 Console.WriteLine("Welcome to The Fountain of Objects game!");
 Console.WriteLine("Would you like to play a small, medium, or large game?");
 string? mazeSize = Console.ReadLine();
-Console.WriteLine("This is maze with unnatrual darkness you are relying on your sense of smell and hearing to determine what room you are in.");
-Console.WriteLine("To move around you can use any of the 'move north,south,east,west' commands");
-RandomTip tip = new RandomTip();
-tip.displayTip();
-Console.WriteLine("Press any key on the keyboard to continue");
-Console.ReadKey(true);
+Console.WriteLine(description);
 
+Console.BackgroundColor = ConsoleColor.Green;
+Console.WriteLine("Press Any key to continue");
+Console.BackgroundColor = ConsoleColor.Black;
+Console.ReadKey(true);
 
 switch(mazeSize)
 {
     case "small":
+    Console.Clear();
     Maze small = new Maze(4);
     small.addPitLocation();
     runGame(small);
     break;
     case "medium":
+    Console.Clear();
     Maze medium = new Maze(6);
     medium.addPitLocation();
     medium.addPitLocation();
@@ -30,6 +57,7 @@ switch(mazeSize)
     runGame(medium);
     break;
     case "large":
+    Console.Clear();
     Maze large = new Maze(6);
     large.addPitLocation();
     large.addPitLocation();
@@ -50,12 +78,7 @@ void runGame(Maze chosenMaze)
     bool win = false;
     while(win == false)
     {
-        Console.Clear();
-        if(chosenMaze.Current.sense == "The Fountain of Objects has been reactivated, and you have escaped with your life!") // detect wins
-        {
-            win = true;
-            continue;
-        }
+        chosenMaze.DisplayMaze();
 
         if(chosenMaze.Current.item == 'P')
         {
@@ -70,10 +93,17 @@ void runGame(Maze chosenMaze)
         }
         Console.WriteLine($"You are in (Row={chosenMaze.y}, Column={chosenMaze.x}) Arrow count is {chosenMaze.Arrows}");
         Console.WriteLine(chosenMaze.Current.sense);
+        
+        if(chosenMaze.Current.sense == "The Fountain of Objects has been reactivated, and you have escaped with your life!") // detect wins
+        {
+            win = true;
+            Console.WriteLine("You Win!");
+            continue;
+        }
 
         if(chosenMaze.Current.item == 'M')
         {
-            chosenMaze.malestromEffect();
+            chosenMaze.maelstromEffect();
             Console.WriteLine("You ran into a malestrom and have been moved");
             continue;
         }
@@ -113,6 +143,9 @@ void runGame(Maze chosenMaze)
             break;
             case"shoot west":
             chosenMaze.shootWest();
+            break;
+            case "help":
+            Console.WriteLine(help);
             break;
         }
     }
