@@ -51,7 +51,6 @@ void runGame(Maze chosenMaze)
     while(win == false)
     {
         Console.Clear();
-        chosenMaze.DisplayMaze();
         if(chosenMaze.Current.sense == "The Fountain of Objects has been reactivated, and you have escaped with your life!") // detect wins
         {
             win = true;
@@ -118,4 +117,3 @@ void runGame(Maze chosenMaze)
         }
     }
 }
-
