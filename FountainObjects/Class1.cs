@@ -7,6 +7,7 @@ public class Maze
     public Room Current;
     public int x = 0;
     public int y = 0;
+    public int Arrows = 5;
     public Maze()
     {
         rowColumn = new Room[4,4];
@@ -47,18 +48,6 @@ public class Maze
         }
     }
 
-    public void DisplayMaze()
-    {
-        for(int row = 0; row< rowColumn.GetLength(0); row++)
-        {
-            for(int column = 0; column<rowColumn.GetLength(1); column++)
-            {
-                Console.Write(rowColumn[row,column].item);
-            }
-            Console.WriteLine();
-        }
-    }
-
     public void setFountainLocation()
     {
         Random rand = new Random();
@@ -73,6 +62,70 @@ public class Maze
         containsFountain.sense = "You hear water dripping in this room. The Fountain of Objects is here!";
         containsFountain.item = 'F';
         rowColumn[randomRow,randomColumn] = containsFountain;
+    }
+
+    public void resetMaze()
+    {
+        for(int row = 0; row<rowColumn.GetLength(0); row ++)
+        {
+            for(int column = 0; column<rowColumn.GetLength(1); column++)
+            {
+                rowColumn[row,column].sense = " ";
+                if(rowColumn[row,column].item == 'F')
+                {
+                    rowColumn[row,column].sense = "You hear water dripping in this room. The Fountain of Objects is here!";
+                }else if(rowColumn[row,column].item == 'P')
+                {
+                    setSurroundings(row,column,"You feel a draft. There is a pit in a nearby room");
+                }else if(rowColumn[row,column].item == 'M')
+                {
+                    setSurroundings(row,column, "You hear the growling and groaning of a maelstrom nearby.");
+                }else if(rowColumn[row,column].item == 'A')
+                {
+                    setSurroundings(row,column,"You can smeel the rotten stench of an amarok in a nearby room");
+                }else if(rowColumn[row,column].item == 'D')
+                {
+                    rowColumn[row,column].sense = "You see light coming from the cavern entrance.";
+                }
+            }
+        }
+    }
+
+    public void shootArrow(int verticle, int horizontal)
+    {
+        if(Arrows > 0)
+        {
+            if(canMove(verticle,horizontal))
+            {
+                if(rowColumn[verticle,horizontal].item == 'M' || rowColumn[verticle,horizontal].item == 'A')
+                {
+                    rowColumn[verticle,horizontal].item = ' ';
+                    clearSurroundings(verticle,horizontal);
+                    resetMaze();
+                }
+            }
+        }
+        Arrows --;
+    }
+
+    public void shootNorth()
+    {
+        shootArrow(y-1,x);
+    }
+
+    public void shootSouth()
+    {
+        shootArrow(y+1,x);
+    }
+
+    public void shootEast()
+    {
+        shootArrow(y,x+1);
+    }
+
+    public void shootWest()
+    {
+        shootArrow(y,x+1);
     }
 
     public void addPitLocation()
@@ -145,27 +198,29 @@ public class Maze
             if(canMove(y+1, x-2) == true)
             {
                 rowColumn[y+1, x-2] = Maelstrom();
-                setSurroundings(y+1,x-2, "You hear the growling and groaning of a malestrom nearby.");
+                //setSurroundings(y+1,x-2, "You hear the growling and groaning of a malestrom nearby.");
             }else if(canMove(y+1,x -1) == true)
             {
                 rowColumn[y+1, x-1] = Maelstrom();
-                setSurroundings(y+1,x-1, "You hear the growling and groaning of a malestrom nearby.");
+                //setSurroundings(y+1,x-1, "You hear the growling and groaning of a malestrom nearby.");
             }else if(canMove(y+1, x))
             {
                 rowColumn[y+1, x] = Maelstrom();
-                setSurroundings(y+1,x, "You hear the growling and groaning of a malestrom nearby.");
+                //setSurroundings(y+1,x, "You hear the growling and groaning of a malestrom nearby.");
             }else if(canMove(y, x-2))
             {
                 rowColumn[y, x-2] = Maelstrom();
-                setSurroundings(y,x-2, "You hear the growling and groaning of a malestrom nearby.");
+                //setSurroundings(y,x-2, "You hear the growling and groaning of a malestrom nearby.");
             }else if(canMove(y,x-1))
             {
                 rowColumn[y, x-1] = Maelstrom();
-                setSurroundings(y,x-1, "You hear the growling and groaning of a malestrom nearby.");
+                //setSurroundings(y,x-1, "You hear the growling and groaning of a malestrom nearby.");
             }else
             {
 
             }
+            resetMaze();
+
             moveNorth();
             moveEast();
             moveEast();
@@ -358,6 +413,18 @@ public class Maze
         return true;
     }
 
+    public void DisplayMaze()
+    {
+        for(int row = 0; row< rowColumn.GetLength(0); row++)
+        {
+            for(int column = 0; column<rowColumn.GetLength(1); column++)
+            {
+                Console.Write(rowColumn[row,column].item);
+            }
+            Console.WriteLine();
+        }
+    }
+
     public void moveNorth()
     {
         if(canMove(y-1, x) == true) //current.Row current.column
@@ -405,5 +472,31 @@ public class Room
     {
         sense = " ";
         item = ' ';
+    }
+}
+
+public class RandomTip
+{
+    Dictionary<int,string> listOfTips = new Dictionary<int,string>();
+
+    public RandomTip()
+    {
+        listOfTips.Add(1,"You can enable the fountain by typing the command 'enable fountain'.");
+        listOfTips.Add(2,"You can destroy maelstroms and amaroks with the command any of the 'shoot north,south,west,east' commands.");
+        listOfTips.Add(3,"When the arrow count is 0 you can no longer shoot any arrows.");
+        listOfTips.Add(4,"Watch out for pits.");
+        listOfTips.Add(5,"Stay astray from amaroks");
+    }
+
+    public int getRandomtip()
+    {
+        Random rand = new Random();
+        int tipNumber = rand.Next(1,5);
+        return tipNumber;
+    }
+
+    public void displayTip()
+    {
+        Console.WriteLine(listOfTips[1]);
     }
 }

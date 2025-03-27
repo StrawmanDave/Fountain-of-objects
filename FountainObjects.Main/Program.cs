@@ -1,10 +1,18 @@
 ﻿//The player is told they can sense in the dark(see, hear, smell).
-using System.Runtime.CompilerServices;
 using FountainObjects;
 
-
+Console.Clear();
+Console.WriteLine("Welcome to The Fountain of Objects game!");
 Console.WriteLine("Would you like to play a small, medium, or large game?");
 string? mazeSize = Console.ReadLine();
+Console.WriteLine("This is maze with unnatrual darkness you are relying on your sense of smell and hearing to determine what room you are in.");
+Console.WriteLine("To move around you can use any of the 'move north,south,east,west' commands");
+RandomTip tip = new RandomTip();
+tip.displayTip();
+Console.WriteLine("Press any key on the keyboard to continue");
+Console.ReadKey(true);
+
+
 switch(mazeSize)
 {
     case "small":
@@ -42,9 +50,8 @@ void runGame(Maze chosenMaze)
     bool win = false;
     while(win == false)
     {
+        Console.Clear();
         chosenMaze.DisplayMaze();
-        Console.WriteLine($"You are in (Row={chosenMaze.y}, Column={chosenMaze.x})");
-        Console.WriteLine(chosenMaze.Current.sense);
         if(chosenMaze.Current.sense == "The Fountain of Objects has been reactivated, and you have escaped with your life!") // detect wins
         {
             win = true;
@@ -62,6 +69,8 @@ void runGame(Maze chosenMaze)
             Console.WriteLine("You ran into a amarok you instantly died");
             break;
         }
+        Console.WriteLine($"You are in (Row={chosenMaze.y}, Column={chosenMaze.x}) Arrow count is {chosenMaze.Arrows}");
+        Console.WriteLine(chosenMaze.Current.sense);
 
         if(chosenMaze.Current.item == 'M')
         {
@@ -93,6 +102,18 @@ void runGame(Maze chosenMaze)
                     chosenMaze.Current.sense = "You hear the rushing waters from the Fountain of Objects. It has been reactivated!";
                     chosenMaze.rowColumn[0,0].sense = "The Fountain of Objects has been reactivated, and you have escaped with your life!";
                 }
+            break;
+            case"shoot north":
+            chosenMaze.shootNorth();
+            break;
+            case"shoot south":
+            chosenMaze.shootSouth();
+            break;
+            case"shoot east":
+            chosenMaze.shootEast();
+            break;
+            case"shoot west":
+            chosenMaze.shootWest();
             break;
         }
     }
